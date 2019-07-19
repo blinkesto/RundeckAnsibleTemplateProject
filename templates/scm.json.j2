@@ -1,0 +1,17 @@
+{
+  "config": {
+    "url": "{{ project.git_url }}",
+    "fetchAutomatically": "true",
+    "pullAutomatically": "true",
+    "dir": "/var/rundeck/projects/{{ project.name }}/scm",
+    "filePattern": ".*\\.yaml",
+    "importUuidBehavior": "preserve",
+    "useFilePattern": "true",
+    "strictHostKeyChecking": "no",
+    "sshPrivateKeyPath": "",
+    "format": "yaml",
+    "branch": "master",
+    "gitPasswordPath": "keys/git_pass",
+    "pathTemplate": "${job.group}${job.name}-${job.id}.${config.format}"
+  }
+}

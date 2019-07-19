@@ -1,0 +1,33 @@
+---
+- hosts: localhost
+
+  vars:
+    rd_jar: lib/rundeck-cli-1.1.7-all.jar
+
+  tasks:
+    - include_vars:
+        file: "{{ prop }}"
+        name: project
+
+    - name: Create project output dir
+      file:
+        path: "out/{{ project.name }}"
+        state: directory
+        mode: '0755'
+
+    - name: Create scm template
+      template:
+        src: templates/scm.json.j2
+        dest: "out/{{ project.name }}/scm.json"
+
+    - name: Create project template
+      template:
+        src: templates/project.properties.j2
+        dest: "out/{{ project.name }}/project.properties.json"
+
+    - name: Create Project
+      shell: "java -jar {{ rd_jar }} projects create -p {{ project.name }} --file out/{{ project.name }}/project.properties.json --format properties"
+
+    - name: Setup SCM
+      shell: "java -jar {{ rd_jar }} projects scm setup --integration import --project {{ project.name }} --file out/{{ project.name }}/scm.json --type git-import"
+
